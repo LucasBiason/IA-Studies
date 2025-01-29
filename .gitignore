@@ -2,3 +2,7 @@
 .venv/
 *.ofx
 *finances*.csv
+test_video.mp4
+transcricoes/
+transcricoes/_videos/
+transcricoes/notas/
