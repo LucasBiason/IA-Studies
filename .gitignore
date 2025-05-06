@@ -1,5 +1,6 @@
 *.env
-.venv/
+*.venv/
+*venv/
 *.ofx
 *finances*.csv
 test_video.mp4
