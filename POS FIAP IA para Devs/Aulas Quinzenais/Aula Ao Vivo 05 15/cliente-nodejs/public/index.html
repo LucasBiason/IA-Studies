@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulador de Empréstimo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 16px;
+        }
+        .botoes-exemplo {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        #resultado {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Verifique sua Aprovação de Empréstimo</h1>
+
+    <div class="botoes-exemplo">
+        <button type="button" onclick="preencherAprovado()">Exemplo Aprovado</button>
+        <button type="button" onclick="preencherReprovado()">Exemplo Reprovado</button>
+    </div>
+
+    <form id="loanForm">
+        <label>Idade:
+            <input type="number" name="person_age" min="18" max="100" required>
+        </label>
+
+        <label>Gênero:
+            <select name="person_gender">
+                <option value="female">Feminino</option>
+                <option value="male">Masculino</option>
+                <option value="other">Outro</option>
+                <option value="prefer_not_to_say">Prefiro não dizer</option>
+            </select>
+        </label>
+
+        <label>Escolaridade:
+            <select name="person_education">
+                <option value="High School">Ensino Médio</option>
+                <option value="Bachelor">Bacharelado</option>
+                <option value="Master">Mestrado</option>
+                <option value="PhD">Doutorado</option>
+                <option value="Other">Outro</option>
+            </select>
+        </label>
+
+        <label>Renda Anual:
+            <input type="number" name="person_income" min="0" required>
+        </label>
+
+        <label>Tempo de Experiência (anos):
+            <input type="number" name="person_emp_exp" min="0" max="80" required>
+        </label>
+
+        <label>Tipo de Moradia:
+            <select name="person_home_ownership">
+                <option value="RENT">Aluguel</option>
+                <option value="OWN">Própria</option>
+                <option value="MORTGAGE">Hipoteca</option>
+                <option value="OTHER">Outro</option>
+            </select>
+        </label>
+
+        <label>Valor do Empréstimo:
+            <input type="number" name="loan_amnt" min="500" max="50000" required>
+        </label>
+
+        <label>Intenção:
+            <select name="loan_intent">
+                <option value="EDUCATION">Educação</option>
+                <option value="MEDICAL">Médico</option>
+                <option value="PERSONAL">Pessoal</option>
+                <option value="VENTURE">Empreendimento</option>
+                <option value="HOMEIMPROVEMENT">Reforma</option>
+                <option value="DEBTCONSOLIDATION">Consolidação de Dívida</option>
+                <option value="OTHER">Outro</option>
+            </select>
+        </label>
+
+        <label>Taxa de Juros (%):
+            <input type="number" name="loan_int_rate" min="0" max="50" step="0.01" required>
+        </label>
+
+        <label>Percentual da Renda:
+            <input type="number" name="loan_percent_income" min="0.01" max="1.0" step="0.01" required>
+        </label>
+
+        <label>Tempo de Histórico de Crédito:
+            <input type="number" name="cb_person_cred_hist_length" min="1" max="30" required>
+        </label>
+
+        <label>Score de Crédito:
+            <input type="number" name="credit_score" min="300" max="850" required>
+        </label>
+
+        <label>Histórico de Inadimplência:
+            <select name="previous_loan_defaults_on_file">
+                <option value="No">Não</option>
+                <option value="Yes">Sim</option>
+                <option value="Unknown">Desconhecido</option>
+            </select>
+        </label>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <div id="resultado"></div>
+
+    <script>
+        function preencherAprovado() {
+            preencher( {
+  person_age: 22,
+  person_gender: "female",
+  person_education: "Master",
+  person_income: 37298,
+  person_emp_exp: 0,
+  person_home_ownership: "RENT",
+  loan_amnt: 5000,
+  loan_intent: "MEDICAL",
+  loan_int_rate: 14.88,
+  loan_percent_income: 0.13,
+  cb_person_cred_hist_length: 4,
+  credit_score: 711,
+  previous_loan_defaults_on_file: "No"
+}
+);
+        }
+
+        function preencherReprovado() {
+            preencher({
+                person_age: 21,
+                person_gender: "female",
+                person_education: "High School",
+                person_income: 12000,
+                person_emp_exp: 0,
+                person_home_ownership: "RENT",
+                loan_amnt: 30000,
+                loan_intent: "VENTURE",
+                loan_int_rate: 27.5,
+                loan_percent_income: 0.9,
+                cb_person_cred_hist_length: 1,
+                credit_score: 450,
+                previous_loan_defaults_on_file: "Yes"
+            });
+        }
+
+        function preencher(exemplo) {
+            for (const [key, value] of Object.entries(exemplo)) {
+                document.querySelector(`[name=${key}]`).value = value;
+            }
+        }
+
+        document.getElementById("loanForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            data.person_age = parseFloat(data.person_age);
+            data.person_income = parseFloat(data.person_income);
+            data.person_emp_exp = parseFloat(data.person_emp_exp);
+            data.loan_amnt = parseFloat(data.loan_amnt);
+            data.loan_int_rate = parseFloat(data.loan_int_rate);
+            data.loan_percent_income = parseFloat(data.loan_percent_income);
+            data.cb_person_cred_hist_length = parseFloat(data.cb_person_cred_hist_length);
+            data.credit_score = parseInt(data.credit_score);
+
+            const response = await fetch("http://127.0.0.1:3001/predict", {
+                
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            document.getElementById("resultado").innerText =
+                result.loan_approved ? "✅ Empréstimo aprovado!" : "❌ Empréstimo não aprovado.";
+        });
+    </script>
+</body>
+</html>
