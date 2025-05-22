@@ -1,5 +1,0 @@
-transformers
-datasets
-numpy
-python-dotenv
-torch
